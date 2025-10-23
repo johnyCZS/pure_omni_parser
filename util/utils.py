@@ -23,7 +23,7 @@ reader = easyocr.Reader(['en'])
 paddle_ocr = PaddleOCR(
     lang='en',  # other lang also available
     use_angle_cls=False,
-    use_gpu=False,  # using cuda will conflict with pytorch in the same process
+    use_cuda=False,  # using cuda will conflict with pytorch in the same process
     show_log=False,
     max_batch_size=1024,
     use_dilation=True,  # improves accuracy
@@ -64,7 +64,7 @@ def get_caption_model_processor(model_name, model_name_or_path="Salesforce/blip2
         if device == 'cpu':
             model = AutoModelForCausalLM.from_pretrained(model_name_or_path, torch_dtype=torch.float32, trust_remote_code=True)
         else:
-            model = AutoModelForCausalLM.from_pretrained(model_name_or_path, torch_dtype=torch.float16, trust_remote_code=True).to(device)
+            model = AutoModelForCausalLM.from_pretrained(model_name_or_path, torch_dtype=torch.float16, trust_remote_code=True, attn_implementation="eager").to(device)
     return {'model': model.to(device), 'processor': processor}
 
 
