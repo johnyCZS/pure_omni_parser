@@ -1,5 +1,9 @@
 from pydantic_settings import BaseSettings
 from pathlib import Path
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -28,7 +32,10 @@ class Settings(BaseSettings):
     @property
     def valid_api_keys(self) -> set[str]:
         """Parse comma-separated API keys into a set"""
-        return {key.strip() for key in self.API_KEYS.split(",")}
+        print(f"DEBUG: Raw API_KEYS = {repr(self.API_KEYS)}")  # Add this
+        keys = {key.strip() for key in self.API_KEYS.split(",")}
+        print(f"DEBUG: Parsed keys = {keys}")  # Add this
+        return keys
 
 
 settings = Settings()

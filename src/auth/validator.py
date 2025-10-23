@@ -1,22 +1,17 @@
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 import os
 import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
+from src.config import settings
 from src.exceptions import InvalidAPIKeyError
 
 
-class Validator:
-    def __init__(self):
-        self.api_key = None
+def validate_api_key(api_key: str) -> None:
+    """Validate API key against configured keys"""
+    if not api_key:
+        raise InvalidAPIKeyError("API key is required")
 
-        if not load_dotenv(".env"):
-            raise FileNotFoundError("'.env' file not found or could not be loaded.")
-
-        self.api_key = os.getenv("API_KEYS")
-
-    def validate(self, incoming_api_key: str):
-        if incoming_api_key != self.api_key:
-            raise InvalidAPIKeyError("The provided API key is invalid.")
-        return True
+    if api_key not in settings.valid_api_keys:
+        raise InvalidAPIKeyError("Invalid API key")
