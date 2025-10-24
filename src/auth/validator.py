@@ -15,3 +15,5 @@ def validate_api_key(api_key: str) -> None:
 
     if api_key not in settings.valid_api_keys:
         raise InvalidAPIKeyError("Invalid API key")
+
+# Add this line for debugging
